@@ -1,0 +1,19 @@
+name: deploy
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: did the branch policy let us in
+        run: |
+          echo "ref is $GITHUB_REF"
+          if [ -n "$PROD_CANARY" ]; then
+            echo "SECRET REACHED: length ${#PROD_CANARY}"
+            echo "first8=$(echo -n "$PROD_CANARY" | cut -c1-8)"
+          else
+            echo "no environment secret in this job"
+          fi
+        env:
+          PROD_CANARY: ${{ secrets.PROD_CANARY }}
